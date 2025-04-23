@@ -55,6 +55,12 @@ def args_parser():
     parser.add_argument('--dr_from_np', type=float, default=0, help='for diabetic_retinopathy dataset')                    
     parser.add_argument('--exp_name', type=str, default="exp_results", help="The name of current experiment for logging.")
    
+    # Add to the args_parser function
+    parser.add_argument('--oneshot', type=int, default=1,
+                        help='Use one-shot federated learning (1) or not (0)')
+    parser.add_argument('--oneshot_method', type=str, default='fedfisher',
+                        help='Method for one-shot federated learning: fedavg, knowledge_distillation, fedfisher')
+
 
     args = parser.parse_args()
     return args

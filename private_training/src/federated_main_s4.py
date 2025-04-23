@@ -19,7 +19,7 @@ from datasets import get_dataset
 from torchvision import models
 from logging_results import logging
 
-from opacus.dp_model_inspector import DPModelInspector
+from opacus.validators import ModuleValidator
 from opacus.utils import module_modification
 from opacus import PrivacyEngine
 
@@ -74,13 +74,12 @@ if __name__ == '__main__':
     ######### DP Model Compatibility #######
     if args.withDP:
         try:
-            inspector = DPModelInspector()
-            inspector.validate(global_model)
+            ModuleValidator.validate(global_model, strict=True)
             print("Model's already Valid!\n")
         except:
             global_model = module_modification.convert_batchnorm_modules(global_model)
-            inspector = DPModelInspector()
-            print(f"Is the model valid? {inspector.validate(global_model)}")
+            ModuleValidator.validate(global_model, strict=True)
+            # print(f"Is the model valid? {inspector.validate(global_model)}")
             print("Model is convereted to be Valid!\n")        
     ######### DP Model Compatibility #######
 

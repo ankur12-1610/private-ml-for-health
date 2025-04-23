@@ -128,3 +128,20 @@ class CNNCifar10Tanh(nn.Module):
         x = torch.tanh(self.fc2(x))
         x = self.fc3(x)
         return F.log_softmax(x, dim=1)
+    
+# Add to models.py
+class FeatureExtractor(nn.Module):
+    def __init__(self, base_model, feature_dim=512):
+        super(FeatureExtractor, self).__init__()
+        self.base_model = base_model
+        self.feature_dim = feature_dim
+        self.feature_layer = nn.Linear(base_model.num_classes, feature_dim)
+        
+    def forward(self, x):
+        # Get features from base model (before final classification layer)
+        features = self.base_model(x)
+        # Project to feature dimension
+        features = self.feature_layer(features)
+        # Normalize features
+        features = F.normalize(features, p=2, dim=1)
+        return features
